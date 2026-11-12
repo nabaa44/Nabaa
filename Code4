@@ -1,0 +1,54 @@
+function Ainv = myinv (A) % Inverse / pseudo-inverse of an n-by-m matrix, built from scratch % (no inv or pinv).
+
+[n, m] = size(A);
+
+if n == m
+
+elseif n > m
+
+else
+
+Ainv = gaussJordan (A);
+
+% independent columns: A+ = (A'A)^-1 * A' Ainv = gaussJordan (A' * A) * A';
+
+% independent rows: A+ = A' * (AA')^-1 Ainv = A' * gaussJordan(A * A');
+
+end
+
+end
+
+function B = gaussJordan(A)
+
+n = size(A, 1);
+
+M = [A, eye(n)];
+
+% augmented matrix [A| I]
+
+for i = 1:n
+
+% partial pivoting: largest entry in column i, rows i..n [~, k] = max(abs (M(i:n, i)));
+
+if abs(M(k, i)) < le-12
+
+error('Matrix is singular: no inverse exists.'); end
+
+M([i k], :) = M([k i], :);
+
+% swap rows
+
+M(i, :) = M(i, :) / M(i, i); % make the pivot equal to 1
+
+for j = [1:i-1, i+1:n]
+
+% clear the rest of column i M(j, :) = M(j, :) - M(j, i) * M(i, :); end
+
+end
+
+B = M(:, n+1:end);
+
+% right half is the inverse
+
+end
+
