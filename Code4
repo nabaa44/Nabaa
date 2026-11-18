@@ -75,4 +75,28 @@ for i in range(len(numbers)):
 
 print("Descending:", numbers)
 
+.......
+
+numbers = []
+
+for i in range(5):
+    n = int(input("Enter number: "))
+    numbers.append(n)
+
+total = 0
+minimum = numbers[0]
+maximum = numbers[0]
+
+for num in numbers:
+    total += num
+
+    if num < minimum:
+        minimum = num
+
+    if num > maximum:
+        maximum = num
+
+print("Sum:", total)
+print("Maximum:", maximum)
+print("Minimum:", minimum)
 
