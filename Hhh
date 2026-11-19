@@ -35,3 +35,20 @@ function B = gaussJordan(A)
     end
     B = M(:, n+1:end);                       % right half is the inverse
 end
+##################################
+clc;
+clear;
+
+A = [2 1;
+     1 3];
+
+B = myinv(A);
+
+disp('Original Matrix:');
+disp(A);
+
+disp('Inverse Matrix:');
+disp(B);
+
+disp('Check A * B:');
+disp(A * B);
