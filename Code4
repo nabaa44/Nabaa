@@ -1,25 +1,52 @@
 
-% Standard Doolittle's LU Decomposition
+A = [0, 2, 3;
+     2, -4, 7;
+     1, -2, 5];
 
-A = [2, -1, -2;
-    -4, 6, 3;
-    -4, -2, 8];
+b = [1; 5; 4];
 
 n = size(A, 1);
-
-L = eye(n);  % Lower matrix with 1s on diagonal
-U = A;       % Copy of A
+L = eye(n);
+U = A;
+P = eye(n);   % Tracks row swaps
 
 for k = 1:n-1
+
+    % Find largest value in column k
+    [~, max_idx] = max(abs(U(k:n, k)));
+    p = max_idx + k - 1;
+
+    if p ~= k
+        % Swap rows if needed
+        U([k, p], :) = U([p, k], :);
+        P([k, p], :) = P([p, k], :);
+
+        if k > 1
+            L([k, p], 1:k-1) = L([p, k], 1:k-1);
+        end
+    end
+
     for i = k+1:n
-        L(i, k) = U(i, k) / U(k, k);  % Save multiplier in L
-        U(i, k:n) = U(i, k:n) - L(i, k) * U(k, k:n); % Eliminate below pivot
+        % Standard elimination
+        L(i, k) = U(i, k) / U(k, k);
+        U(i, k:n) = U(i, k:n) - L(i, k) * U(k, k:n);
     end
 end
 
-disp('Matrix L:');
-disp(L);
+% Solve Ax = b using Forward and Backward Substitution
+Pb = P * b;
 
-disp('Matrix U:');
-disp(U);
+y = zeros(n, 1);
+for i = 1:n
+    y(i) = Pb(i) - L(i, 1:i-1) * y(1:i-1);
+end
 
+x = zeros(n, 1);
+for i = n:-1:1
+    x(i) = (y(i) - U(i, i+1:n) * x(i+1:n)) / U(i, i);
+end
+
+disp('Matrix P:'); disp(P);
+disp('Matrix L:'); disp(L);
+disp('Matrix U:'); disp(U);
+disp('Solution x:'); disp(x);
